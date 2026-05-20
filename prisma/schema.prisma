@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────
+//  ADMIN (seul utilisateur avec auth)
+// ─────────────────────────────────────────
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  nom       String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+}
+
+// ─────────────────────────────────────────
+//  CATEGORIES
+// ─────────────────────────────────────────
+model Category {
+  id       String    @id @default(cuid())
+  nom      String
+  slug     String    @unique
+  products Product[]
+}
+
+// ─────────────────────────────────────────
+//  PRODUITS
+// ─────────────────────────────────────────
+model Product {
+  id          String      @id @default(cuid())
+  nom         String
+  description String?
+  prix        Float
+  stock       Int         @default(0)
+  image       String?
+  actif       Boolean     @default(true)
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// ─────────────────────────────────────────
+//  COMMANDES (client sans compte)
+// ─────────────────────────────────────────
+model Order {
+  id             String      @id @default(cuid())
+  numero         String      @unique // RM-2024-0001
+  clientNom      String
+  clientTelephone String
+  clientAdresse  String
+  clientVille    String
+  clientEmail    String?     // optionnel
+  total          Float
+  statut         OrderStatus @default(EN_ATTENTE)
+  notes          String?
+  items          OrderItem[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+// ─────────────────────────────────────────
+//  ITEMS DE COMMANDE
+// ─────────────────────────────────────────
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  order      Order   @relation(fields: [orderId], references: [id])
+  productId  String
+  product    Product @relation(fields: [productId], references: [id])
+  nomProduit String  // snapshot au moment de la commande
+  prix       Float   // snapshot au moment de la commande
+  quantite   Int
+}
+
+// ─────────────────────────────────────────
+//  ENUMS
+// ─────────────────────────────────────────
+enum Role {
+  ADMIN
+}
+
+enum OrderStatus {
+  EN_ATTENTE
+  CONFIRMEE
+  EN_LIVRAISON
+  LIVREE
+  ANNULEE
+}
+
+
+
