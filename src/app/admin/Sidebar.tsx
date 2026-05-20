@@ -7,10 +7,8 @@ import {
   LayoutDashboard,
   Package,
   Tag,
-  ShoppingCart,
   FileSpreadsheet,
   Users,
-  Settings,
   ShoppingBag,
   ChevronRight,
 } from "lucide-react";
@@ -20,10 +18,8 @@ const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/products", label: "Produits", icon: Package },
   { href: "/admin/categories", label: "Catégories", icon: Tag },
-  { href: "/admin/orders", label: "Commandes", icon: ShoppingCart },
   { href: "/admin/excel", label: "Excel", icon: FileSpreadsheet },
   { href: "/admin/users", label: "Utilisateurs", icon: Users },
-  { href: "/admin/settings", label: "Paramètres", icon: Settings },
 ];
 
 export function Sidebar() {
