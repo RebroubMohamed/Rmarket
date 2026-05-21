@@ -1,7 +1,6 @@
 // src/app/admin/products/[id]/page.tsx
 "use client";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import ProductForm from "../../ProductForm";
 
 export default function EditProductPage() {
