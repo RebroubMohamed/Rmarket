@@ -11,8 +11,8 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/login");
+  // const session = await getServerSession(authOptions);
+  // if (!session) redirect("/login");
 
   const sessionUser = session.user as
     | { nom?: string; name?: string; email?: string }
